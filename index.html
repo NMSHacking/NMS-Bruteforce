@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NMS Bruteforce</title>
+	<style>
+		@keyframes blink {
+			50% { opacity: 1; }
+			100% { opacity: 0; }
+		}
+
+		body {
+			background-color: #151515;
+			color: #eee;
+			font-family: 'Share Tech Mono', monospace;
+			user-select: none;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.password {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 60px;
+			letter-spacing: 5px;
+			text-transform: uppercase;
+		}
+		
+		.username {
+			position: absolute;
+			top: 35%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 60px;
+			letter-spacing: 5px;
+			text-transform: uppercase;
+		}
+
+        .master-key {
+			position: absolute;
+			top: 65%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 30px;
+			letter-spacing: 5px;
+			text-transform: uppercase;
+		}
+		.granted {
+			position: absolute;
+			top: 75%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 30px;
+		}
+
+		.info {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		.info p { 
+			margin: 10px; 
+		}
+
+		.button {
+			background-color: #111;
+			border: solid 1px #888;
+			padding: 8px 25px;
+			font-size: 26px;
+			letter-spacing: 2px;
+			cursor: pointer;
+		}
+
+		.rerun {
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
+		}
+
+		.start {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		.blink {
+			animation: blink 0.7s steps(1, start) infinite alternate;
+		}
+	</style>
+</head>
+<body>
+	<div class="info">
+		<p>Accessed the mainframe using a double-handshake attack on the firewall. Attack IP Adress: 142.250.186.109<br></p>
+		<p>Checked the IP and found a login panel!<br></p>
+		<p>This web site is protecting with Google Captcha and with DIF,IPS protector. Attack will be risky. If you are know what are you doing, continue.<br></p>
+		<p class="hidden">NMS Hacking BotNet is attacking.<span class="blink">_</span></p>
+	</div>
+	<div class="password hidden">Password</div>
+	<div class="username hidden">hackdenemesi@gmail.com</div>
+	<div class="master-key hidden">Master-Key</div>
+	<div class="button start">START ATTACK</div>
+	<div class="blink granted hidden">ACCESS GRANTED!</div>
+	<div class="button rerun hidden">RERUN</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		var username = 'hackdenemesi@gmail.com';
+		var passwords = generatePasswords(5000);
+		var masterKeys = generateMasterKeys(5000);
+		var indexOld;
+		var index = Math.floor(Math.random() * passwords.length);
+		var password = passwords[index];
+		var characters = [];
+		var counter = 0;
+		var masterKeyIndex = 0;
+
+		var interval = setInterval(function () {
+			for (var i = 0; i < counter; i++) {
+				characters[i] = password.charAt(i);
+			}
+			for (var i = counter; i < password.length; i++) {
+				characters[i] = generateRandomCharacter();
+			}
+			$('.password').text(characters.join(''));
+		}, 1);
+
+		function hack() {
+			counter++;
+			if (counter == password.length) {
+				$('.granted, .rerun').removeClass('hidden');
+			}
+		}
+
+		$(window).on('keydown', hack);
+		$('.password').on('click', hack);
+
+		$('.rerun').on('click', function () {
+			indexOld = index;
+			do {
+				index = Math.floor(Math.random() * passwords.length);
+			} while (index == indexOld);
+
+			$('.granted, .rerun').addClass('hidden');
+			password = passwords[index];
+			characters = [];
+			counter = 0;
+		});
+
+		$('.start').on('click', function () {
+			$(this).addClass('hidden');
+			$('.info p:last-child, .password, .username, .master-key').removeClass('hidden');
+		});
+
+		function generatePasswords(count) {
+			var passwords = [];
+			var characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()-_=+';
+			for (var i = 0; i < count; i++) {
+				var password = '';
+				for (var j = 0; j < 10; j++) {
+					var randomIndex = Math.floor(Math.random() * characters.length);
+					password += characters.charAt(randomIndex);
+				}
+				passwords.push(password);
+			}
+			return passwords;
+		}
+
+		function generateMasterKeys(count) {
+			var masterKeys = [];
+			var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+			for (var i = 0; i < count; i++) {
+				var masterKey = '';
+				for (var j = 0; j < 50; j++) {
+					var randomIndex = Math.floor(Math.random() * characters.length);
+					masterKey += characters.charAt(randomIndex);
+				}
+				masterKeys.push(masterKey);
+			}
+			return masterKeys;
+		}
+
+		function generateRandomCharacter() {
+			var characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()-_';
+			var randomIndex = Math.floor(Math.random() * characters.length);
+			return characters.charAt(randomIndex);
+		}
+
+		setInterval(function () {
+			var masterKey = masterKeys[masterKeyIndex % masterKeys.length];
+			$('.master-key').text(masterKey);
+			masterKeyIndex++;
+		}, 1000);
+	</script>
+</body>
+</html>
